@@ -1,0 +1,193 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Vacant Proyecto SGIEM - UTP
+  license:
+    name: MIT
+servers:
+  - url: http://localhost:8080/
+tags:
+  - name: vacant
+    description: Everything about your Vacants
+paths:
+  /vacants:
+    get:
+      summary: List all vacants
+      description: Return list Vacants
+      operationId: listVacants
+      tags:
+        - vacant
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VacantResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VacantResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a vacant
+      description: Add a new vacant
+      operationId: registerVacant
+      tags:
+        - vacant
+      requestBody:
+        description: Create a new employee
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VacantRequest'
+          application/xml:
+            schema:
+              $ref: '#/components/schemas/VacantRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/VacantRequest'
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VacantResponse'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/VacantResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /vacants/{code}/{proceso}:
+    get:
+      summary: List all vacants by type process
+      description: Return list Vacants
+      operationId: listVacantsProcess
+      tags:
+        - vacant
+      parameters:
+        - name: code
+          in: path
+          description: code user - employee
+          required: true
+          schema:
+            type: string
+        - name: proceso
+          in: path
+          description: type process
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VacantResponse'
+            application/xml:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/VacantResponse'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+components:
+  schemas:
+    VacantRequest:
+      type: object
+      properties:
+        titulo:
+          type: string
+          example: James
+        userCode:
+          type: string
+          example: FFFFFFFF
+          description: Codigo del Usuario que creo la Vacante
+        proceso:
+          type: string
+          example: INICIADO
+          enum:
+            - INICIADO
+            - EN PROCESO
+            - FINALIZADO
+        candidatos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+    Employee:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+        names:
+          type: string
+          example: James
+        email:
+          type: string
+          example: james@gmail.com
+        surenames:
+          type: string
+          example: Gosling May
+        code:
+          type: string
+          example: FFFFFFFF
+        profile:
+          type: string
+          example: BACKEND DEVELOPER
+    VacantResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          example: 1
+        titulo:
+          type: string
+          example: James
+        userCode:
+          type: string
+          example: FFFFFFFF
+          description: Codigo del Usuario que creo la Vacante
+        proceso:
+          type: string
+          example: INICIADO
+          enum:
+            - INICIADO
+            - EN PROCESO
+            - FINALIZADO
+        candidatos:
+          type: array
+          items:
+            $ref: '#/components/schemas/Employee'
+    Error:
+      type: object
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string

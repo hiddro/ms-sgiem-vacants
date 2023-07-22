@@ -1,0 +1,11 @@
+spring:
+  banner:
+    location: classpath:banner/vacantsBanner.txt
+  application:
+    name: VACANT-SERVICE
+  data:
+    mongodb:
+      uri: mongodb+srv://educc0r:laia200619@sgiem-cluster.ghx2esb.mongodb.net/empsgiem
+
+server:
+  port: 8083
